@@ -1,0 +1,20 @@
+{
+  "name": "api-estoque",
+  "version": "1.0.0",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node --watch --no-warnings app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@fastify/cors": "^10.0.1",
+    "@supabase/supabase-js": "^2.47.7",
+    "dotenv": "^16.4.7",
+    "fastify": "^5.1.0"
+  }
+}
