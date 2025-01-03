@@ -78,7 +78,8 @@ server.delete('/products/:id', async (request, reply) => {
 });
 
 // Inicializar o servidor
-server.listen({ port: 3333 }, (err, address) => {
+const PORT = process.env.PORT || 3333;
+server.listen({ port: PORT }, (err, address) => {
   if (err) {
     console.error(err);
     process.exit(1);
