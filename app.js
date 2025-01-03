@@ -79,10 +79,12 @@ server.delete('/products/:id', async (request, reply) => {
 
 // Inicializar o servidor
 const PORT = process.env.PORT || 3333;
-server.listen({ port: PORT }, (err, address) => {
+
+server.listen(PORT, '0.0.0.0', (err) => {
   if (err) {
-    console.error(err);
+    console.error("Erro ao iniciar o servidor:", err);
     process.exit(1);
   }
-  console.log(`Servidor rodando em ${address}`);
+  console.log(`Servidor rodando na porta ${PORT}`);
 });
+
