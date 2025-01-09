@@ -77,6 +77,31 @@ server.delete('/products/:id', async (request, reply) => {
   }
 });
 
+server.post('/autenticacao', async (request, reply) => {
+  try {
+    const { email, password } = request.body;
+
+    if (!email || !password) {
+      return reply.status(400).send({ error: 'Email e senha são obrigatórios' });
+    }
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      return reply.status(401).send({ error: 'Falha na autenticação', details: error.message });
+    }
+
+    return reply.send({ message: 'Autenticação bem-sucedida', data });
+  } catch (err) {
+    console.error(err);
+    return reply.status(500).send({ error: 'Erro interno do servidor' });
+  }
+});
+
+
 const PORT = process.env.PORT || 3333;
 
 server.listen({ port: Number(PORT), host: '0.0.0.0' }, (err, address) => {
