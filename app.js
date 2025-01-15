@@ -20,30 +20,13 @@ const handleError = (reply, error, message) => {
 // Rota GET - Listar todos os produtos
 server.get('/products', async (request, reply) => {
   try {
-    const { data, error } = await supabase
-      .from('products')
-      .select(`
-        id,
-        name,
-        price,
-        amount,
-        coastprice,
-        lastpurchase,
-        lastupdate,
-        categories (name),  -- Relaciona com a tabela categories e pega o campo name
-        supplier (name)     -- Relaciona com a tabela supplier e pega o campo name
-      `);
-
-    if (error) {
-      return handleError(reply, error, 'Erro ao buscar os produtos');
-    }
-
+    const { data, error } = await supabase.from('products').select('*');
+    if (error) return handleError(reply, error, 'Erro ao buscar os produtos');
     reply.send({ message: 'Produtos encontrados com sucesso', data });
   } catch (err) {
     handleError(reply, err, 'Erro interno do servidor');
   }
 });
-
 
 // Rota POST - Inserir produto
 server.post('/products', async (request, reply) => {
