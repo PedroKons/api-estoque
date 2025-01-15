@@ -20,7 +20,7 @@ const handleError = (reply, error, message) => {
 // Rota GET - Listar todos os produtos
 server.get('/products', async (request, reply) => {
   try {
-    const { data, error } = await supabase.from('products').select('*');
+    const { data, error } = await supabase.from('products').select('*, categories (name), supplier (name)');
     if (error) return handleError(reply, error, 'Erro ao buscar os produtos');
     reply.send({ message: 'Produtos encontrados com sucesso', data });
   } catch (err) {
