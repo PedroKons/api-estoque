@@ -30,7 +30,7 @@ server.get('/products', async (request, reply) => {
 
 // Rota POST - Inserir produto
 server.post('/products', async (request, reply) => {
-  const { id, name, amount, price } = request.body;
+  const { id, name, amount, price, coastprice, lastpurchase, idsupplier, lastupdate, idcategorie } = request.body;
 
   // Validação de campos
   if (!id || !name || !amount || !price) {
