@@ -38,7 +38,7 @@ server.post('/products', async (request, reply) => {
   }
 
   try {
-    const { error } = await supabase.from('products').insert([{ d, name, amount, price, coastprice, lastpurchase, idsupplier, lastupdate, idcategorie }]);
+    const { error } = await supabase.from('products').insert([{ id, name, amount, price, coastprice, lastpurchase, idsupplier, lastupdate, idcategorie }]);
     if (error) return handleError(reply, error, 'Erro ao inserir o produto');
     reply.send({ message: 'Produto cadastrado com sucesso' });
   } catch (err) {
