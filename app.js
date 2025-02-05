@@ -32,6 +32,28 @@ server.get('/products', async (request, reply) => {
   }
 });
 
+// Rota Get - Listar Fornecedores
+server.get('/supplier', async (request, reply) => {
+  try {
+    const { data, error } = await supabase.from('supplier').select('*');
+    if (error) return handleError(reply, error, 'Erro ao buscar os fornecedores');
+    reply.send({ message: 'Fornecedores encontrados com sucesso', data });
+  } catch (err) {
+    handleError(reply, err, 'Erro interno do servidor');
+  }
+});
+
+// Rota Get - Listar Categorias
+server.get('/categories', async (request, reply) => {
+  try {
+    const { data, error } = await supabase.from('categories').select('*');
+    if (error) return handleError(reply, error, 'Erro ao buscar as categorias');
+    reply.send({ message: 'Categorias encontradas com sucesso', data });
+  } catch (err) {
+    handleError(reply, err, 'Erro interno do servidor');
+  }
+});
+
 // Rota POST - Inserir produto
 server.post('/products', async (request, reply) => {
   const { id, name, amount, price, coastprice, lastpurchase, idsupplier, lastupdate, idcategorie } = request.body;
@@ -137,6 +159,7 @@ server.get('/generate-upload-url', async (request, reply) => {
     return reply.code(500).send({ error: 'Erro ao gerar a URL assinada.' });
   }
 });
+
 
 const PORT = process.env.PORT || 3333;
 
