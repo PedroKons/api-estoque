@@ -56,7 +56,7 @@ server.get('/categories', async (request, reply) => {
 
 // Rota POST - Inserir produto
 server.post('/products', async (request, reply) => {
-  const { id, name, amount, price, coastprice, lastpurchase, idsupplier, lastupdate, idcategorie } = request.body;
+  const { id, name, amount, price, coastprice, lastpurchase, idsupplier, lastupdate, idcategorie, imgUrl } = request.body;
 
   // Validação de campos
   if (!id || !name || !amount || !price) {
@@ -64,7 +64,7 @@ server.post('/products', async (request, reply) => {
   }
 
   try {
-    const { error } = await supabase.from('products').insert([{ id, name, amount, price, coastprice, lastpurchase, idsupplier, lastupdate, idcategorie }]);
+    const { error } = await supabase.from('products').insert([{ id, name, amount, price, coastprice, lastpurchase, idsupplier, lastupdate, idcategorie, imgUrl }]);
     if (error) return handleError(reply, error, 'Erro ao inserir o produto');
     reply.send({ message: 'Produto cadastrado com sucesso' });
   } catch (err) {
