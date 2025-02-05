@@ -2,6 +2,10 @@ import { fastify } from 'fastify';
 import { createClient } from '@supabase/supabase-js';
 import 'dotenv/config';
 import cors from '@fastify/cors';
+import { PutObjectCommand } from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import s3Client from './s3Client.js';
+
 
 const server = fastify();
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
@@ -101,6 +105,38 @@ server.post('/autenticacao', async (request, reply) => {
   }
 });
 
+server.get('/generate-upload-url', async (request, reply) => {
+  const { filename, contentType } = request.query;
+
+  if (!filename || !contentType) {
+    return reply
+      .code(400)
+      .send({ error: 'Os parâmetros "filename" e "contentType" são obrigatórios.' });
+  }
+
+  const bucketName = 'img'; // Substitua com o nome do seu bucket
+  const key = `uploads/${filename}`;    // Define o caminho dentro do bucket onde a imagem será armazenada
+  const publicUrl = `https://pub-2e0de451f23245dea255e8acccb36d8c.r2.dev/${key}`;
+  
+  // Cria o comando para realizar o PUT (upload) do objeto
+  const command = new PutObjectCommand({
+    Bucket: bucketName,
+    Key: key,
+    ContentType: contentType,
+  });
+
+  // Define o tempo de expiração da URL assinada (em segundos)
+  const expiresIn = 900; // 15 minutos
+
+  try {
+    const signedUrl = await getSignedUrl(s3Client, command, { expiresIn });
+    // Retorna a URL assinada para o cliente
+    return { signedUrl, key, publicUrl };
+  } catch (error) {
+    request.log.error(error);
+    return reply.code(500).send({ error: 'Erro ao gerar a URL assinada.' });
+  }
+});
 
 const PORT = process.env.PORT || 3333;
 
